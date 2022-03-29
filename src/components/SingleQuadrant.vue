@@ -6,7 +6,7 @@
                 v-bind:answer="answer"
                 />
         </div>        
-        <div v-if="!completed">
+        <div v-if="!completed" :style="isCurrentGuessWord() ? '' : 'color: red;'">
             <GuessingLine 
                 v-bind:guess="currentGuess || ' '"
             />
@@ -33,6 +33,7 @@ export default {
         guesses: Array,
         currentGuess: String,
         completed: Boolean,
+        isCurrentGuessWord: Function,
     },
     data() {
         return {

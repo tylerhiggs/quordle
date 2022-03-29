@@ -14,6 +14,7 @@
           v-bind:guesses="completed[i-1] ? guesses.slice(0, finalIndices[i-1]) : guesses"
           v-bind:currentGuess="currentGuess"
           v-bind:completed="completed[i-1]"
+          v-bind:isCurrentGuessWord="isCurrentGuessWord"
           class="single-wordle"
         />
       </div>
@@ -26,6 +27,10 @@
       />
     </div>
   </main>
+  <div v-if="this.gameOver" class="game-over-menu-container">
+    <div class="game-over-menu-box">
+    </div>
+  </div>
 </template>
 
 <script>
@@ -49,7 +54,11 @@ export default {
       this.topMessage = ''
       this.gameOver = false
       for (let i = 0; i < 4; i++) {
-        this.answers.push(this.randomWord())
+        let newWord = this.randomWord()
+        while (this.answers.includes(newWord)) {
+          newWord = this.randomWord()
+        }
+        this.answers.push(newWord)
       }
       console.log("answers: ", this.answers)
     },
@@ -57,18 +66,19 @@ export default {
       // does not work yet, need word list connection
       return words.words[Math.floor(Math.random() * words.words.length)]
     },
+    isCurrentGuessWord() {
+      return words.words.includes(this.currentGuess) || this.currentGuess.length < 5
+    },
     keyPressed(event) {
       if (this.gameOver) {
         return
       }
       if ((this.LOWERCASE.includes(event.key) || this.LOWERCASE.toUpperCase().includes(event.key)) && this.currentGuess.length < 5) {
         this.currentGuess += event.key
-        console.log("adding key: ", event.key)
       } else if (event.key === this.BACKSPACE_STRING) {
-        console.log("deleting final char")
         this.currentGuess = this.currentGuess.slice(0, -1)
       } else if (event.key === this.ENTER_STRING) {
-        if (this.currentGuess.length === 5) {
+        if (this.currentGuess.length === 5 && words.words.includes(this.currentGuess)) {
           this.guesses.push(this.currentGuess)
           this.completed = this.answers.map(answer => this.guesses.includes(answer))
           this.finalIndices = this.answers.map(answer => this.guesses.indexOf(answer) + 1)
@@ -138,7 +148,7 @@ export default {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   justify-content: center;
-  background-color: pink;
+  background-color: lightblue;
   position: fixed;
   bottom: 160px;
   top: 100px;
@@ -202,6 +212,28 @@ export default {
 .pink-background {
   background-color: pink;
 }
+
+.game-over-menu-container {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+}
+
+.game-over-menu-box {
+  width: 50%;
+  height: 50%;
+  border-radius: 4rem;
+  background-color: blueviolet;
+}
+
+
 
 
 </style>
