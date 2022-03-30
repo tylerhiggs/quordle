@@ -140,6 +140,10 @@ export default {
 
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+
+
 .four-wordles {
   display: grid;
   position: relative;
@@ -192,6 +196,7 @@ export default {
   left: 0;
   height: 56px;
   align-items: center;
+  font-family: 'Nunito', sans-serif;
 }
 
 .main {
@@ -200,6 +205,7 @@ export default {
   height: 100%;
   display: flex;
   justify-content: center;
+  font-family: 'Nunito', sans-serif;
 }
 
 .success-msg {
