@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="bottom-row-keys">
-            <div class="single-key" @click="letterPressed('Enter')">
+            <div class="single-key" @click="enterPressed">
                 Enter
                 <div class="color-squares">
                 </div>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="single-key" @click="letterPressed('Backspace')">
+            <div class="single-key" @click="backPressed">
                 {{"<-"}}
                 <div class="color-squares">
                 </div>
@@ -145,7 +145,13 @@ export default {
         },
         letterPressed(letter) {
             console.log("key pressed(keyboard vue): " + letter)
-            this.emitter.emit('pressed', letter)
+            this.emitter.emit('pressed', letter.toLowerCase())
+        },
+        backPressed() {
+            this.emitter.emit("pressed" , "Backspace")
+        },
+        enterPressed() {
+            this.emitter.emit("pressed", "Enter")
         },
     },
 }
