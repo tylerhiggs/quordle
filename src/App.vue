@@ -67,7 +67,7 @@ export default {
       return words.words[Math.floor(Math.random() * words.words.length)]
     },
     isCurrentGuessWord() {
-      return words.words.includes(this.currentGuess) || this.currentGuess.length < 5
+      return words.words.includes(this.currentGuess.toLowerCase()) || this.currentGuess.length < 5
     },
     keyPressed(event) {
       if (this.gameOver) {
@@ -78,7 +78,7 @@ export default {
       } else if (event.key === this.BACKSPACE_STRING) {
         this.currentGuess = this.currentGuess.slice(0, -1)
       } else if (event.key === this.ENTER_STRING) {
-        if (this.currentGuess.length === 5 && words.words.includes(this.currentGuess)) {
+        if (this.currentGuess.length === 5 && words.words.includes(this.currentGuess.toLowerCase())) {
           this.guesses.push(this.currentGuess)
           this.completed = this.answers.map(answer => this.guesses.includes(answer))
           this.finalIndices = this.answers.map(answer => this.guesses.indexOf(answer) + 1)
@@ -130,6 +130,13 @@ export default {
     this.BACKSPACE_STRING = "Backspace"
 
     window.addEventListener('keyup', this.keyPressed)
+
+    console.log("here")
+    this.emitter.on('pressed', (key) => {
+      console.log("pressed (in App.vue): ", key)
+      this.keyPressed({key: key})
+    })
+    
   },
   mounted() {
     this.$refs["four-wordles"].style.fontSize = this.$refs["four-wordles"].clientHeight / 40 + "px"

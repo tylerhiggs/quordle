@@ -2,7 +2,7 @@
     <div class="row-container">
         <div class="top-row-keys">
             <div class="single-key letter-key" v-for="i in 10" :key="i">
-                <div :class="isDone(guesses, answers, i-1) ? 'alpha-z' : ''">
+                <div :class="isDone(guesses, answers, i-1) ? 'alpha-z' : ''" @click="letterPressed(qwerty[i-1])">
                     <div class="color-squares">
                         <div v-for="j in 4" :key="j" :class="calcColor(guesses, answers, i-1, j-1)">
                         </div>
@@ -15,7 +15,7 @@
             <div> 
             </div>
             <div class="single-key letter-key" v-for="i in 9" :key="i">
-                <div :class="isDone(guesses, answers, i+9) ? 'alpha-z' : ''">
+                <div :class="isDone(guesses, answers, i+9) ? 'alpha-z' : '' " @click="letterPressed(qwerty[i+9])">
                     {{qwerty[i+9]}}
                     <div class="color-squares">
                         <div v-for="j in 4" :key="j" :class="calcColor(guesses, answers, i+9, j-1)">
@@ -25,13 +25,13 @@
             </div>
         </div>
         <div class="bottom-row-keys">
-            <div class="single-key">
+            <div class="single-key" @click="letterPressed('Enter')">
                 Enter
                 <div class="color-squares">
                 </div>
             </div>
             <div class="single-key letter-key" v-for="i in 7" :key="i">
-                <div :class="isDone(guesses, answers, i+18) ? 'alpha-z' : ''">
+                <div :class="isDone(guesses, answers, i+18) ? 'alpha-z' : ''" @click="letterPressed(qwerty[i+18])">
                     {{qwerty[i+18]}}
                     <div class="color-squares">
                         <div v-for="j in 4" :key="j" :class="calcColor(guesses, answers, i+18, j-1)">
@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="single-key">
+            <div class="single-key" @click="letterPressed('Backspace')">
                 {{"<-"}}
                 <div class="color-squares">
                 </div>
@@ -50,8 +50,6 @@
 </template>
 
 <script>
-//import KeyboardKeys from "./KeyboardKeys.vue";  
-
 export default {
     name: 'QuadrantsKeyboard',
     components: {
@@ -144,7 +142,11 @@ export default {
             else {
                 return quadrantClass
             }
-        }
+        },
+        letterPressed(letter) {
+            console.log("key pressed(keyboard vue): " + letter)
+            this.emitter.emit('pressed', letter)
+        },
     },
 }
 
@@ -184,6 +186,7 @@ export default {
     justify-content: center;
     align-items: center;
     font-size: 1.5rem;
+    cursor: pointer;
 }
 
 .letter-key {
